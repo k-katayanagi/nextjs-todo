@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const CreateButton = () => {
+interface Props {
+  children: ReactNode; 
+}
+
+const CreateButton = (props:Props) => {
+  const {children} = props
   return (
-    <button type="submit" >追加</button> 
+    <button type="submit">
+      {children}
+    </button>
   );
 };
 
