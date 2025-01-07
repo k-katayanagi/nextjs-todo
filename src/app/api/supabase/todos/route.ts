@@ -28,11 +28,11 @@ export const getTodos = async ():Promise<Todos[]> => {
 };
 
 
-export const addTodos = async (addTodo:Omit<Todos, 'id' | 'status'|'created_at'>) => {
+export const addTodos = async (addTodo:Omit<Todos, 'id' |'created_at'>) => {
     try {
          // Supabaseにデータ挿入
-        const {title,content} = addTodo
-        const {data,error} = await supabase.from('Todos').insert({ title:title,content:content,status:"未完了"}).select();
+        const {title,content,status} = addTodo
+        const {data,error} = await supabase.from('Todos').insert({ title:title,content:content,status:status}).select();
         // Supabaseエラーのハンドリング
         if (error) {
             console.error("Error fetching todos:", error.message);

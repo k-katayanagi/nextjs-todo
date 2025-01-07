@@ -1,43 +1,32 @@
 import { useState } from 'react';
-
-
+import { sortStatus } from '@/types/todos';
 
 // フォーム入力を管理するカスタムフック
-const useOption = (initialValue: string) => {
+const useOption = (initialValue:sortStatus) => {
   const [value, setValue] = useState(initialValue||"未完了"||"すべて");
-//   const [isEditing,setIsEditing] = useState(false)
 
-  const sortStatuses:string[] = [
-    "すべて",
-    "未完了",
-    "進行中",
-    "完了"
-]
+  const sortStatuses: sortStatus[] = initialValue === "すべて"
+  ? ["すべて", "未完了", "進行中", "完了"]
+  : ["未完了", "進行中", "完了"];
 
-const statuses:string[] = [
-    "未完了",
-    "進行中",
-    "完了"
-]
+//   const sortStatuses:string[] = [
+//     "すべて",
+//     "未完了",
+//     "進行中",
+//     "完了"
+// ]
 
+// const statuses:string[] = [
+//     "未完了",
+//     "進行中",
+//     "完了"
+// ]
 
-  const handleSet = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setValue(event.target.value);
-  };
-
-//   const handleReset = () => {
-//     setValue('');
-//   };
-
-//   const handleSet = (todo:string) => {
-//     setValue(todo);
-//   };
-
-//   const handleEditing = (isEditing:boolean) => {
-//     setIsEditing(!isEditing);
-//   };
-
-
+const handleSet = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const newValue = event.target.value as sortStatus;
+  setValue(newValue);
+  return newValue;
+};
 
   return {sortStatuses,statuses,value,handleSet};
 };

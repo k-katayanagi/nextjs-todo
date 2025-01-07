@@ -7,7 +7,7 @@ import { Todos } from '@/types/todos'
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todos[]>([]);
-  const [sortTodos, setsortTodos] = useState<Todos[]>([]);
+  const [sortTodos, setSortTodos] = useState<Todos[]>([]);
 
   const [isCompleted,SetIsCompleted] = useState<boolean>(false)
   const router = useRouter();
@@ -17,6 +17,7 @@ export const useTodos = () => {
       try {
         const fetchedTodos = await getTodos();
         setTodos(fetchedTodos);
+        setSortTodos(fetchedTodos);
       } catch (error) {
         console.error('Error fetching todos:', error);
       }
@@ -31,7 +32,7 @@ export const useTodos = () => {
     }, 1000);
   }
 
-  const addTodo = async (newTodo: Omit<Todos, 'id' | 'status'|'created_at'>) => {
+  const addTodo = async (newTodo: Omit<Todos, 'id' |'created_at'>) => {
     try {
       const addedTodo = await addTodos(newTodo);
       setTodos(prevTodos => [...prevTodos, addedTodo]); // 新しいTODOをリストに追加
@@ -63,9 +64,16 @@ export const useTodos = () => {
     }
   };
 
-  const handleSortTodo = () => {
-    setsortTodos('')
+  const handleSortTodo = (setStatus:string) => {
+    if (setStatus === "すべて") {
+      // ステータスが「すべて」の場合はフィルタリングせず、全てのTODOを表示
+      setSortTodos(todos);
+    } else {
+      // その他の場合はステータスでフィルタリング
+      const sorted = todos.filter(todo => todo.status === setStatus);
+      setSortTodos(sorted);
+    }
   }
 
-  return {todos,addTodo,deleteTodo,updateTodo,handleChangeComplete,isCompleted,sortTodos};
+  return {todos,addTodo,deleteTodo,updateTodo,handleChangeComplete,isCompleted,sortTodos,handleSortTodo};
 };
