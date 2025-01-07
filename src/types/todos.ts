@@ -6,3 +6,6 @@ export interface Todos {
     status: "未完了"|"進行中"|"完了";
     created_at?: string;
 }
+
+export type sortStatus = "すべて"|"未完了"|"進行中"|"完了"
+

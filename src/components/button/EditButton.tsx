@@ -1,18 +1,31 @@
 import React from 'react'
-// import { Todos } from '@/types/todos'
-// import { useRouter } from "next/navigation"; // next/navigation からインポート
-
 
 type Props = {
-  handleIsEdit: (isEditing:boolean) =>void;
+
+  handleEdit: {
+    handleEditing: (isEditing: boolean) => void;
+    handleSetTitle: (title: string) => void;
+    handleSetContent: (content: string) => void;
+  };
   isEditing:boolean
+  children:string
+  title:string
+  content:string
   };
 
 const EditButton = (props:Props) => {
-  const {handleIsEdit,isEditing} = props
+  const {handleEdit,isEditing,children,title,content} = props
+  const {handleEditing,handleSetTitle,handleSetContent} = handleEdit
+
+  //親コンポーネント内に関数を置いたほうがいい？
+  const handlecClick = () => {
+    handleEditing(isEditing)
+    handleSetTitle(title)
+    handleSetContent(content)
+  }
 
   return (
-    <button onClick={()=>handleIsEdit(isEditing)}>編集</button>
+    <button onClick={handlecClick}>{isEditing ? "キャンセル" : children }</button>
   )
 }
 
