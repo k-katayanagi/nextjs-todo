@@ -1,6 +1,8 @@
+import { statuses,sortStatuses } from "@/consts/sortStatus";
+import { sortStatus,status } from "@/types/todos";
 interface Props {
-    selectStatus:string;
-    statuses:string[]
+    selectStatus:sortStatus|status;
+    statuses:typeof statuses|typeof sortStatuses
     onChange:(event: React.ChangeEvent<HTMLSelectElement>)=>void
 }
 

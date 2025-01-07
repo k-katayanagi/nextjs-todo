@@ -32,7 +32,7 @@ export const useTodos = () => {
     }, 1000);
   }
 
-  const addTodo = async (newTodo: Omit<Todos, 'id' |'created_at'>) => {
+  const addTodo = async (newTodo:{ title: string; content: string; status: string }) => {
     try {
       const addedTodo = await addTodos(newTodo);
       setTodos(prevTodos => [...prevTodos, addedTodo]); // 新しいTODOをリストに追加

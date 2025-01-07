@@ -28,7 +28,7 @@ export const getTodos = async ():Promise<Todos[]> => {
 };
 
 
-export const addTodos = async (addTodo:Omit<Todos, 'id' |'created_at'>) => {
+export const addTodos = async (addTodo:{title: string; content: string; status: string }) => {
     try {
          // Supabaseにデータ挿入
         const {title,content,status} = addTodo

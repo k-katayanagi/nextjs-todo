@@ -9,6 +9,7 @@ import Input from '@/components/input/Input';
 import CreateButton from '@/components/button/CreateButton';
 import SortStatesOption from '@/components/option/SortStatesOption';
 import useOption from '@/hooks/useOption';
+import { statuses } from '@/consts/sortStatus';
 
 const TodoDetail = () => {
   const { id } = useParams();  // URLからIDを取得
@@ -18,7 +19,8 @@ const TodoDetail = () => {
   const { isEditing, handleEditing} = useInput('');
   const { todos, deleteTodo, updateTodo,isCompleted } = useTodos();
   const selectTodo = todos.filter((todo) => todo.id === todoId);
-  const {value:status,statuses,handleSet} = useOption(selectTodo[0]?.status||'未完了');
+  const {value:status,handleSet} = useOption(selectTodo[0]?.status||'未完了');
+ 
 
 
   const handleUpdate = (event: React.FormEvent) => {

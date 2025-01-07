@@ -7,6 +7,7 @@ import BackButton from '@/components/button/BackButton';
 import Input from '@/components/input/Input';
 import SortStatesOption from '@/components/option/SortStatesOption';
 import useOption from '@/hooks/useOption';
+import { statuses } from '@/consts/sortStatus';
 
 
 const CreateTodos = () => {
@@ -14,13 +15,14 @@ const CreateTodos = () => {
     // カスタムフックでフォーム入力を管理
     const { value: title, handleChange: handleChangeTitle,handleReset:handleResetTitle} = useInput('');
     const { value: content, handleChange: handleChangeContent,handleReset:handleResetContent} = useInput('');
-    const {value,handleSet,sortStatuses} = useOption('未完了');
+    const {value:status,handleSet} = useOption('未完了');
     const { addTodo,isCompleted } = useTodos();
+
 
 
   const handleAddTodo = (event: React.FormEvent) => {
     event.preventDefault(); // フォームのデフォルト動作（ページのリロード）を防ぐ
-    addTodo({title, content,value})
+    addTodo({title, content,status})
     handleResetTitle()
     handleResetContent()
   };

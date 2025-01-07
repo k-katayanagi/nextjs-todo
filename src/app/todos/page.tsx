@@ -5,11 +5,12 @@ import Link from 'next/link'
 import SortStatesOption from '@/components/option/SortStatesOption';
 import useOption from '@/hooks/useOption';
 import { useTodos } from '@/hooks/useTodos';
+import {sortStatuses} from '@/consts/sortStatus';
 
 const TodosList = () => {
   //todoリスト取得
   const {todos,handleSortTodo,sortTodos} = useTodos();
-  const {value,sortStatuses,handleSet} = useOption('すべて');
+  const {value,handleSet} = useOption('すべて');
 
   const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const setStatus = handleSet(event)

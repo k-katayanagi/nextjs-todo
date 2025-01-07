@@ -8,4 +8,5 @@ export interface Todos {
 }
 
 export type sortStatus = "すべて"|"未完了"|"進行中"|"完了"
+export type status = "未完了"|"進行中"|"完了"
 
