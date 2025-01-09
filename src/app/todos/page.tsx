@@ -1,5 +1,4 @@
 "use client";
-
 import DetailsButton from '@/components/button/DetailsButton'
 import Link from 'next/link'
 import SortStatesOption from '@/components/option/SortStatesOption';

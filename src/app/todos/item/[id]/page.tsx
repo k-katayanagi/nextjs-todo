@@ -11,7 +11,6 @@ import SortStatesOption from '@/components/option/SortStatesOption';
 import useOption from '@/hooks/useOption';
 import { statuses } from '@/consts/sortStatus';
 import { Todos } from '@/types/todos'
-import { useEffect } from 'react';
 
 const TodoDetail = () => {
   const { id } = useParams();  // URLからIDを取得
@@ -31,7 +30,7 @@ const TodoDetail = () => {
     handleSetContent(content);
   };
 
-  const handleDelete = (todo:Todos,isDelete:boolean) =>{
+  const handleDelete = (todo:Todos) =>{
     ToggleDelete(true)
     const userConfirmed = window.confirm('削除しますか？');
      if (userConfirmed) {
