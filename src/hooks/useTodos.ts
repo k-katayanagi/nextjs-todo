@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { getTodos,addTodos,deleteTodos,updateTodos } from '@/app/api/supabase/todos/route';
+import { getTodos,addTodos,deleteTodos,updateTodos,getTOrderTodos } from '@/app/api/supabase/todos/route';
 import { useRouter } from "next/navigation"; // next/navigation からインポート
 import { Todos } from '@/types/todos'
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todos[]>([]);
   const [sortTodos, setSortTodos] = useState<Todos[]>([]);
-
+  const [isDelete,setIsDelete] = useState<boolean>(false)
+  const [isDeleted,setIsDeleted] = useState<boolean>(false)
   const [isCompleted,SetIsCompleted] = useState<boolean>(false)
   const router = useRouter();
 
@@ -30,6 +31,7 @@ export const useTodos = () => {
     setTimeout(() => {
       SetIsCompleted(false);
     }, 1000);
+
   }
 
   const addTodo = async (newTodo:{ title: string; content: string; status: string }) => {
@@ -53,27 +55,61 @@ export const useTodos = () => {
     }
   };
 
-  const deleteTodo = async (deleteTodo:Todos) => {
+
+  const handleSortTodo = async (setStatus: string) => {
+    try {
+      // 昇順または降順の文字列が含まれているか確認
+      if (/昇順|降順/.test(setStatus)) {
+        const orderedTodo = await getTOrderTodos(setStatus);
+        setSortTodos(orderedTodo)
+      } else {
+        // ステータスが「すべて」の場合
+        if (setStatus === "3:すべて") {
+          // ステータスが「すべて」の場合はフィルタリングせず、全てのTODOを表示
+          setSortTodos(todos);
+        } else {
+          // その他の場合はステータスでフィルタリング
+          const sorted = todos.filter(todo => todo.status === setStatus);
+
+          setSortTodos(sorted);
+        }
+      }
+    } catch (error) {
+      console.error('Error sorting todo:', error);
+    }
+  };
+
+
+  //delete関連
+  const deleteTodo = async (deleteTodo: Todos) => {
     try {
       const deletedTodo = await deleteTodos(deleteTodo.id);
       setTodos(prevTodos => prevTodos.filter(todo => todo.id !== deletedTodo.id)); // 削除したTODOをリストから除外
-      router.back(); // 前のページに戻る
-
+      setIsDeleted(true);
+      debugger
+      router.back();  // 削除後にページ遷移
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
 
-  const handleSortTodo = (setStatus:string) => {
-    if (setStatus === "すべて") {
-      // ステータスが「すべて」の場合はフィルタリングせず、全てのTODOを表示
-      setSortTodos(todos);
-    } else {
-      // その他の場合はステータスでフィルタリング
-      const sorted = todos.filter(todo => todo.status === setStatus);
-      setSortTodos(sorted);
-    }
-  }
+  const ToggleDelete = (isDelete:boolean) => {
+    setIsDelete(isDelete);
+  };
 
-  return {todos,addTodo,deleteTodo,updateTodo,handleChangeComplete,isCompleted,sortTodos,handleSortTodo};
+  useEffect(() => {
+    if (isDeleted) {
+      console.log(isDeleted);
+      debugger
+      // メッセージを表示する処理
+      setTimeout(() => {
+        ToggleDelete(false);
+        setIsDeleted(false)
+      }, 3000); // 3秒後に消す
+    }
+  }, [isDeleted]); // isDelete に依存
+
+
+
+  return {todos,addTodo,deleteTodo,updateTodo,handleChangeComplete,isCompleted,sortTodos,handleSortTodo,isDelete,ToggleDelete,isDeleted};
 };

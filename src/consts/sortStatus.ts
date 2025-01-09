@@ -1,26 +1,13 @@
-// export const sortStatuses:["すべて", "未完了", "進行中", "完了"] = [
-//     "すべて",
-//     "未完了",
-//     "進行中",
-//     "完了"
-// ]
-
-export const sortStatuses = [
-    "すべて",
-    "未完了",
-    "進行中",
-    "完了"
-] as const;
+export const sortStatuses:[  "0:未完了","1:進行中","2:完了","3:すべて"] = [
+    "0:未完了",
+    "1:進行中",
+    "2:完了",
+    "3:すべて"
+]
 
 
-export const statuses = [
-    "未完了",
-    "進行中",
-    "完了"
-  ] as const;
-
-// export const statuses:["未完了","進行中","完了"] = [
-//     "未完了",
-//     "進行中",
-//     "完了"
-// ]
+export const statuses:[  "0:未完了","1:進行中","2:完了"] = [
+    "0:未完了",
+    "1:進行中",
+    "2:完了"
+]

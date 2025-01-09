@@ -1,0 +1,15 @@
+/* Tailwindのベーススタイル */
+@tailwind base;
+
+/* Tailwindのコンポーネントスタイル */
+@tailwind components;
+
+/* Tailwindのユーティリティスタイル */
+@tailwind utilities;
+
+
+
+body {
+    @apply flex items-center justify-center min-h-screen;
+    }
+

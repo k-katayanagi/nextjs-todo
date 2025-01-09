@@ -1,28 +1,35 @@
-import { statuses,sortStatuses } from "@/consts/sortStatus";
-import { sortStatus,status } from "@/types/todos";
+import { statuses, sortStatuses } from "@/consts/sortStatus";
+
 interface Props {
-    selectStatus:sortStatus|status;
-    statuses:typeof statuses|typeof sortStatuses
-    onChange:(event: React.ChangeEvent<HTMLSelectElement>)=>void
+  selectStatus: string;
+  statuses: typeof statuses | typeof sortStatuses;
+  onChange: (event: string) => void;
+  className?: string; 
 }
 
-const SortStatesOption = (props:Props) => {
-    const {selectStatus,statuses,onChange} =  props 
+const SortStatesOption = (props: Props) => {
+  const { selectStatus, statuses, onChange,className } = props;
 
   return (
     <>
-        <label htmlFor="status">ステータス:</label>
-        <select
+      <select
         id="status"
         value={selectStatus}
-        onChange={onChange}
-        >
-        {statuses.map((status)=>( <option key={status} value={status}>{status}</option>))
-        }
-        </select>
+        onChange={(e) => onChange(e.target.value)}
+        className={`mt-1 p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+      >
+        {statuses.map((status) => {
+          const [, statusName] = status.split(":");
+          return (
+            <option key={status} value={status}>
+              {statusName}
+            </option>
+          );
+        })}
+      </select>
     </>
- 
   );
 };
 
 export default SortStatesOption;
+
