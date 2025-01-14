@@ -4,7 +4,7 @@ export interface Todos {
     title: string;
     content: string;
     status: "0:未完了"|"1:進行中"|"2:完了";
-    created_at?: string;
+    created_at: string;
 }
 
 export type sortStatus = "すべて"|"未完了"|"進行中"|"完了"

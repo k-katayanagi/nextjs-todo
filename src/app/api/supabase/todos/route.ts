@@ -27,48 +27,6 @@ export const getTodos = async ():Promise<Todos[]> => {
     }
 };
 
-
-export const getTOrderTodos = async (orderItem: string): Promise<Todos[]> => {
-    try {
-    const columnMap: Record<string, string> = {
-        "id": "id",
-        "タイトル": "title",
-        "内容": "content",
-        "ステータス": "status",
-        "登録日": "created_at",
-    };
-
-    const match = orderItem.match(/^(.*)(昇順|降順)$/);
-    if (!match) {
-        throw new Error("Invalid orderItem format");
-    }
-
-    const [, columnName, orderDirection] = match;
-    const column = columnMap[columnName];
-    const ascending = orderDirection === "昇順";
-
-    if (!column) {
-        throw new Error(`Unknown column name: ${columnName}`);
-    }
-
-      // Supabaseからデータを取得
-    const { data, error } = await supabase
-        .from("Todos")
-        .select("*")
-        .order(column, { ascending });
-
-    if (error) {
-        console.error("Error fetching todos:", error);
-        throw error;
-    }
-    return data || [];
-
-    } catch (error) {
-        console.error("Error in getTOrderTodos:", error);
-        throw error;
-    }
-  };
-
 export const addTodos = async (addTodo:{title: string; content: string; status: string }) => {
     try {
          // Supabaseにデータ挿入

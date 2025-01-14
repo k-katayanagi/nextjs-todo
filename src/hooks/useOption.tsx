@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-// フォーム入力を管理するカスタムフック
+
 const useOption = (initialValue:string) => {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState<string>(initialValue);
 
 
 const handleSet = (event:string) => {

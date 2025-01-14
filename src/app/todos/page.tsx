@@ -14,12 +14,20 @@ const TodosList = () => {
   //todoリスト取得
   const { handleSortTodo, sortTodos } = useTodos();
   const { isDeleted } = useTodoContext();
-  const { value, handleSet } = useOption('3:すべて');
+  const { value:sortValue, handleSet:handleSetSort } = useOption('3:すべて');
+  const { value:orderValue, handleSet:handleSetOrder } = useOption('0:id昇降順');
 
-  const handleChangeSort = (event: string) => {
-    const setStatus = handleSet(event)
-    handleSortTodo(setStatus)
-  }
+  const handleChangeSort = (event: string, type: 'sort' | 'order') => {
+    let setSortStatus = sortValue; // デフォルトのソート
+    let setOrderStatus = orderValue; // デフォルトのオーダー
+
+    if (type === 'sort') {
+      setSortStatus = handleSetSort(event);
+    } else if (type === 'order') {
+      setOrderStatus = handleSetOrder(event);
+    }
+    handleSortTodo(setSortStatus, setOrderStatus);
+  };
 
   return (
     <div className="grid items-center justify-items-center p-8 pb-10 gap-8 sm:gap-4 sm:p-10 font-[family-name:var(--font-geist-sans)]">
@@ -33,13 +41,13 @@ const TodosList = () => {
       <div className="flex items-center gap-4">
         <OrderTodoOption
           orderItems={orderItems}
-          selectOrder={value}
-          onChange={handleChangeSort} />
+          selectOrder={orderValue}
+          onChange={(event) => handleChangeSort(event, 'order')} />
         <p>絞込み</p>
         <SortStatesOption
           statuses={sortStatuses}
-          selectStatus={value}
-          onChange={handleChangeSort} />
+          selectStatus={sortValue}
+          onChange={(event) => handleChangeSort(event, 'sort')} />
         <Link href={"todos/create"}>
           <button
             className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
