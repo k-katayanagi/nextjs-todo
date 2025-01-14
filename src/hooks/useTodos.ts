@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { getTodos,addTodos,deleteTodos,updateTodos,getTOrderTodos } from '@/app/api/supabase/todos/route';
+import { getTodos, addTodos, deleteTodos, updateTodos, getTOrderTodos } from '@/app/api/supabase/todos/route';
 import { useRouter } from "next/navigation"; // next/navigation からインポート
 import { Todos } from '@/types/todos'
+import { useTodoContext } from '@/contexts/TodoContext';
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todos[]>([]);
   const [sortTodos, setSortTodos] = useState<Todos[]>([]);
-  const [isDelete,setIsDelete] = useState<boolean>(false)
-  const [isDeleted,setIsDeleted] = useState<boolean>(false)
-  const [isCompleted,SetIsCompleted] = useState<boolean>(false)
+  const [isDelete, setIsDelete] = useState<boolean>(false)
+  const { isDeleted, setIsDeleted } = useTodoContext();
+  const [isCompleted, SetIsCompleted] = useState<boolean>(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const useTodos = () => {
     fetchTodos();
   }, []);
 
-  const handleChangeComplete = () =>{
+  const handleChangeComplete = () => {
     SetIsCompleted(true);
     setTimeout(() => {
       SetIsCompleted(false);
@@ -34,7 +35,7 @@ export const useTodos = () => {
 
   }
 
-  const addTodo = async (newTodo:{ title: string; content: string; status: string }) => {
+  const addTodo = async (newTodo: { title: string; content: string; status: string }) => {
     try {
       const addedTodo = await addTodos(newTodo);
       setTodos(prevTodos => [...prevTodos, addedTodo]); // 新しいTODOをリストに追加
@@ -47,7 +48,7 @@ export const useTodos = () => {
 
   const updateTodo = async (id: number, updatedData: { title: string; content: string; status: string }) => {
     try {
-      const updatedTodo = await updateTodos(id,updatedData);
+      const updatedTodo = await updateTodos(id, updatedData);
       setTodos((prevTodos) => prevTodos.map(todo => todo.id === updatedTodo.id ? updatedTodo : todo)); // 新しいTODOに置き換え
       handleChangeComplete()
     } catch (error) {
@@ -79,37 +80,32 @@ export const useTodos = () => {
     }
   };
 
-
   //delete関連
   const deleteTodo = async (deleteTodo: Todos) => {
     try {
       const deletedTodo = await deleteTodos(deleteTodo.id);
       setTodos(prevTodos => prevTodos.filter(todo => todo.id !== deletedTodo.id)); // 削除したTODOをリストから除外
       setIsDeleted(true);
-      debugger
       router.back();  // 削除後にページ遷移
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
 
-  const ToggleDelete = (isDelete:boolean) => {
+  const ToggleDelete = (isDelete: boolean) => {
     setIsDelete(isDelete);
   };
 
   useEffect(() => {
     if (isDeleted) {
       console.log(isDeleted);
-      debugger
       // メッセージを表示する処理
       setTimeout(() => {
         ToggleDelete(false);
         setIsDeleted(false)
-      }, 3000); // 3秒後に消す
+      }, 1000); // 3秒後に消す
     }
   }, [isDeleted]); // isDelete に依存
 
-
-
-  return {todos,addTodo,deleteTodo,updateTodo,handleChangeComplete,isCompleted,sortTodos,handleSortTodo,isDelete,ToggleDelete,isDeleted};
+  return { todos, addTodo, deleteTodo, updateTodo, handleChangeComplete, isCompleted, sortTodos, handleSortTodo, isDelete, ToggleDelete };
 };
